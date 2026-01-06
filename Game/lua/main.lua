@@ -1,3 +1,6 @@
+local PlayerMod = require("player")
+local player = PlayerMod.player
+
 -- Virtual key codes (Windows)
 local VK_LEFT  = 0x25
 local VK_UP    = 0x26
@@ -8,6 +11,11 @@ local VK_SPACE  = 0x20
 local VK_SHIFT  = 0x10 
 local VK_CONTROL = 0x11 
 local VK_ALT = 0x12
+
+local keys = {
+  LEFT = VK_LEFT, RIGHT = VK_RIGHT, UP = VK_UP, DOWN = VK_DOWN, ESC = VK_ESC, 
+  SPACE = VK_SPACE, SHIFT = VK_SHIFT, CONTROL = VK_CONTROL, ALT = VK_ALT
+}
 
 -- Preset Colors
 local COLOR_BLACK      = 0x000000
@@ -33,25 +41,6 @@ local COLOR_PINK       = 0xCBC0FF
 local windowWidth = 800
 local windowHeight = 600
 
--- Player Table
-local player = {
-  x = 100,
-  y = 100,
-  playerRectSize = 40,
-  walkSpeed = 3,
-  runSpeed = 6,
-  speed = walkSpeed,
-  hp = 5,
-  dashSpeed = 18,
-  dashTickMax = 8,
-  dashCooldownMax = 30
-}
-
--- Dash State variables
-local dashTicks = 0
-local dashCooldown = 0
-local prevAltDown = false
-
 function Initialize()
   Engine:SetWidth(windowWidth)
   Engine:SetHeight(windowHeight)
@@ -59,54 +48,11 @@ function Initialize()
   Engine:SetTitle("Dodge_Out")
 end
 
-function Start()
-  -- Called once at start
-end
-
-function SetBounds()
-  if(player.x < 0) then player.x = 0 end
-  if(player.x > windowWidth - player.playerRectSize) then player.x = windowWidth - player.playerRectSize end
-  if(player.y < 0) then player.y = 0 end
-  if(player.y > windowHeight - player.playerRectSize) then player.y = windowHeight - player.playerRectSize end
-end
-
-function DashLogic()
-  -- Dash Logic
-  if dashCooldown > 0 then dashCooldown = dashCooldown - 1 end
-
-  local altDown = Engine:IsKeyDown(VK_ALT)
-  local altPressed = (altDown and not prevAltDown)
-  prevAltDown = altDown
-
-  -- Start Dash if everything is 0 (duration and cooldown)
-  if altPressed and dashCooldown == 0 and dashTicks == 0 then
-    dashTicks = player.dashTickMax
-    dashCooldown = player.dashCooldownMax
-  end
-end
-
-function HandleMovement()  
-  DashLogic()
-  player.speed = player.walkSpeed
-  
-  if Engine:IsKeyDown(VK_SHIFT) then player.speed = player.runSpeed end
-  if dashTicks > 0  then player.speed = player.dashSpeed end
-
-  if Engine:IsKeyDown(VK_LEFT)  then player.x = player.x - player.speed end
-  if Engine:IsKeyDown(VK_RIGHT) then player.x = player.x + player.speed end
-  if Engine:IsKeyDown(VK_UP)    then player.y = player.y - player.speed end
-  if Engine:IsKeyDown(VK_DOWN)  then player.y = player.y + player.speed end
-
-  if dashTicks > 0 then dashTicks = dashTicks - 1 end
-end
-
 function Tick()
   Engine:Repaint()
 
-  
-  HandleMovement()
-
-  SetBounds()
+  PlayerMod.Update(Engine, keys)
+  PlayerMod.SetBounds(windowWidth, windowHeight)
       
   if Engine:IsKeyDown(VK_ESC) then Engine:Quit() end
 end
@@ -120,7 +66,7 @@ function Paint(l, t, r, b)
   Engine:FillRect(player.x, player.y, player.x + player.playerRectSize, player.y + player.playerRectSize)
 
   -- UI text
-  Engine:SetColor(COLOR_GRAY_LIGHT)
+  Engine:SetColor(COLOR_GRAY_DARK)
   Engine:DrawString("Arrows - move, ESC - quits", 10, 10)
   Engine:DrawString("Shift - Run, Alt - dash", 10, 30)
   Engine:DrawString("Space - Melee", 10, 50)
