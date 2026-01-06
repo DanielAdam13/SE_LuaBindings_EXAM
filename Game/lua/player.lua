@@ -57,4 +57,8 @@ function M.Update(Engine, keys)
   if M.dashTicks > 0 then M.dashTicks = M.dashTicks - 1 end
 end
 
+function M.IsDashing()
+    return M.dashTicks > 0
+end
+
 return M

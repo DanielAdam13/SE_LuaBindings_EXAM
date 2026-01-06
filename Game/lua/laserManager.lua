@@ -124,7 +124,10 @@ end
 -- ============================
 -- Player collision (ONLY active)
 -- ============================
-function M.DamagePlayerIfHit(player)
+function M.DamagePlayerIfHit(player, invulnerable)
+  if invulnerable then
+    return false end
+
   for i = 1, #M.lasers do
     local L = M.lasers[i]
     if L.isActive and not L.didHit then

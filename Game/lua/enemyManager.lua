@@ -85,6 +85,7 @@ function M.Draw(Engine, colors)
   Engine:SetColor(colors.ENEMY)
   for i = 1, #M.enemies do
     local e = M.enemies[i]
+    if(e.telegraphTicks >= M.telegraphTicksMax - 5) then Engine:SetColor(colors.ENEMY_ATTACK) end
     Engine:FillRect(e.x, e.y, e.x + e.size, e.y + e.size)
   end
 

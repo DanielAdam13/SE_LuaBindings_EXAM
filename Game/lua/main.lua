@@ -44,7 +44,7 @@ local COLOR_ORANGE     = 0x00A5FF
 local COLOR_PURPLE     = 0x800080
 local COLOR_PINK       = 0xCBC0FF
 
-local objectColors = {ENEMY = COLOR_ORANGE, LASER = COLOR_RED}
+local objectColors = {ENEMY = COLOR_ORANGE, ENEMY_ATTACK = COLOR_MAGENTA, LASER = COLOR_RED}
 
 -- Window Size
 local windowWidth = 800
@@ -77,7 +77,7 @@ function Tick()
   MeleeAttackMgr.Update(Engine, keys, player)
   EnemyMgr.KillEnemiesHitByMelee(MeleeAttackMgr, LaserMgr)
 
-  if LaserMgr.DamagePlayerIfHit(player) then
+  if LaserMgr.DamagePlayerIfHit(player, PlayerMod.IsDashing()) then
     player.hp = player.hp - 1
 
     if player.hp <= 0 then
