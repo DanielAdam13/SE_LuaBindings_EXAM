@@ -2,6 +2,7 @@
 
 #include "GameEngine.h"
 
+
 static int LuaPanic(lua_State* L) {
     const char* msg = lua_tostring(L, -1);
     ::MessageBoxA(nullptr,
@@ -33,15 +34,20 @@ void EngineLuaBindings::BindAll()
         sol::no_constructor,
 
         // Window / control
-        //"SetTitle", &GameEngine::SetTitle,           // PROBLEMATIC WITH tstring and UNICODE
+        "SetTitle", &GameEngine::SetTitle,           // PROBLEMATIC WITH tstring and UNICODE
         "SetWidth", &GameEngine::SetWidth,
         "SetHeight", &GameEngine::SetHeight,
         "SetFrameRate", &GameEngine::SetFrameRate,
         "Quit", &GameEngine::Quit,
         "Repaint", &GameEngine::Repaint,
 
+        "GoFullscreen", &GameEngine::GoFullscreen,
+        "IsFullScreen", &GameEngine::IsFullscreen,
+
         "GetWidth", &GameEngine::GetWidth,
         "GetHeight", &GameEngine::GetHeight,
+        "GetFrameRate", &GameEngine::GetFrameRate,
+        "GetFrameDelay", &GameEngine::GetFrameDelay,
 
         // Input
         "IsKeyDown", &GameEngine::IsKeyDown,
@@ -54,14 +60,15 @@ void EngineLuaBindings::BindAll()
         "FillRect", sol::overload(
             [](GameEngine& e, int l, int t, int r, int b) { return e.FillRect(l, t, r, b); },
             [](GameEngine& e, int l, int t, int r, int b, int opacity) { return e.FillRect(l, t, r, b, opacity); }
-        )
+        ),
+        "DrawRoundRect", &GameEngine::DrawRoundRect,
+        "FillRoundRect", &GameEngine::FillRoundRect,
 
         // PROBLEMATIC WITH tstring and UNICODE
-
-        // "DrawString", sol::overload(
-        //     [](GameEngine& e, const tstring& text, int l, int t) { return e.DrawString(text, l, t); },
-        //     [](GameEngine& e, const tstring& text, int l, int t, int r, int b) { return e.DrawString(text, l, t, r, b); }
-        // )
+        "DrawString", sol::overload(
+        static_cast<int (GameEngine::*)(const tstring&, int, int) const>(&GameEngine::DrawString),
+        static_cast<int (GameEngine::*)(const tstring&, int, int, int, int) const>(&GameEngine::DrawString)
+    )
     );
 }
 

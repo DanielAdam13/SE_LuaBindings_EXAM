@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     bindings.BindAll();
     
 
-    // Load default Lua game
+    // Load default Lua game (through EngineLuaBindings)
     bindings.LoadMain("lua/main.lua");
 
     

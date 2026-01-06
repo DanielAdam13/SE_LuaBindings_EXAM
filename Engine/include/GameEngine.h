@@ -71,23 +71,23 @@ public:
 	void		SetGame				(AbstractGame* gamePtr);
 	bool		Run					(HINSTANCE hInstance, int cmdShow);
 
-	void		SetTitle			(const tstring& title);			// SetTitle automatically sets the window class name 
+	void		SetTitle			(const tstring& title);	// DONE		// SetTitle automatically sets the window class name 
 	void		SetWindowPosition	(int left, int top);
 	bool		SetWindowRegion		(const HitRegion* regionPtr);
 	void		SetKeyList			(const tstring& keyList);
-	void		SetFrameRate		(int frameRate);
-	void		SetWidth			(int width);
-	void		SetHeight			(int height);
+	void		SetFrameRate		(int frameRate); // DONE
+	void		SetWidth			(int width); // DONE
+	void		SetHeight			(int height); // DONE
 
-	bool		GoFullscreen		();		
+	bool		GoFullscreen		();		// DONE
 	bool		GoWindowedMode		();
 	void		ShowMousePointer	(bool value);
-	void		Quit				();
+	void		Quit				(); // DONE
 
 	bool		HasWindowRegion		()										const;
-	bool		IsFullscreen		()										const;
+	bool		IsFullscreen		()										const; // DONE
 
-	bool		IsKeyDown			(int vKey)								const;
+	bool		IsKeyDown			(int vKey)								const; // DONE
 
 	void		MessageBox			(const tstring& message)				const;
 	void		MessageBox			(const TCHAR* message)					const;
@@ -101,26 +101,26 @@ public:
 	SIZE		CalculateTextDimensions(const tstring& text, const Font* fontPtr, RECT rect)				const;
 
 	// Draw Functions
-	void		SetColor			(COLORREF color);
+	void		SetColor			(COLORREF color); // DONE
 	void		SetFont				(Font* fontPtr);
 
-	bool		FillWindowRect		(COLORREF color)														const;
+	bool		FillWindowRect		(COLORREF color)														const; // DONE
 
-	bool		DrawLine			(int x1, int y1, int x2, int y2)										const;
+	bool		DrawLine			(int x1, int y1, int x2, int y2)										const; // DONE
 
-	bool		DrawRect			(int left, int top, int right, int bottom)								const;
-	bool		FillRect			(int left, int top, int right, int bottom)								const;
-	bool		FillRect			(int left, int top, int right, int bottom, int opacity)					const;
-	bool		DrawRoundRect		(int left, int top, int right, int bottom, int radius)					const;
-	bool		FillRoundRect		(int left, int top, int right, int bottom, int radius)					const;
+	bool		DrawRect			(int left, int top, int right, int bottom)								const; // DONE
+	bool		FillRect			(int left, int top, int right, int bottom)								const; // DONE
+	bool		FillRect			(int left, int top, int right, int bottom, int opacity)					const; // DONE
+	bool		DrawRoundRect		(int left, int top, int right, int bottom, int radius)					const; // DONE
+	bool		FillRoundRect		(int left, int top, int right, int bottom, int radius)					const; // DONE
 	bool		DrawOval			(int left, int top, int right, int bottom)								const;
 	bool		FillOval			(int left, int top, int right, int bottom)								const;
 	bool		FillOval			(int left, int top, int right, int bottom, int opacity)					const;
 	bool		DrawArc				(int left, int top, int right, int bottom, int startDegree, int angle)	const;
 	bool		FillArc				(int left, int top, int right, int bottom, int startDegree, int angle)	const;
 
-	int			DrawString			(const tstring& text, int left, int top)								const;
-	int			DrawString			(const tstring& text, int left, int top, int right, int bottom)			const;
+	int			DrawString			(const tstring& text, int left, int top)								const; // DONE
+	int			DrawString			(const tstring& text, int left, int top, int right, int bottom)			const; // DONE
 
 	bool		DrawBitmap			(const Bitmap* bitmapPtr, int left, int top)							const;
 	bool		DrawBitmap			(const Bitmap* bitmapPtr, int left, int top, RECT sourceRect)			const;
@@ -131,16 +131,16 @@ public:
 	bool		FillPolygon			(const POINT ptsArr[], int count, bool close)							const;
 
 	COLORREF	GetDrawColor		()						const;
-	bool		Repaint				()						const;
+	bool		Repaint				()						const; // DONE
 
 	// Accessor Member Functions	
 	tstring		GetTitle			()						const; 
 	HINSTANCE	GetInstance			()						const	{ return m_Instance; }
 	HWND		GetWindow			()						const	{ return m_Window; }
-	int			GetWidth			()						const	{ return m_Width; }
-	int			GetHeight			()						const	{ return m_Height; }
-	int			GetFrameRate		()						const	{ return m_FrameRate; }
-	int			GetFrameDelay		()						const	{ return m_FrameDelay; }
+	int			GetWidth			()						const	{ return m_Width; } // DONE
+	int			GetHeight			()						const	{ return m_Height; } // DONE
+	int			GetFrameRate		()						const	{ return m_FrameRate; } // DONE
+	int			GetFrameDelay		()						const	{ return m_FrameDelay; } // DONE
 	POINT		GetWindowPosition	()						const;
 
 	// Tab control

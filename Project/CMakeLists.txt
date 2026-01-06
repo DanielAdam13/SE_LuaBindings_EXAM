@@ -16,3 +16,11 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     lua::lua
     GameEngineLib
 )
+
+if (MSVC)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC UNICODE _UNICODE)
+endif()
+
+if (WIN32)
+  target_link_libraries(${PROJECT_NAME} PUBLIC winmm)
+endif()
