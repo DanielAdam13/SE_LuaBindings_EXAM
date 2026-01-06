@@ -5,6 +5,8 @@ local EnemyMgr = require("enemyManager")
 
 local LaserMgr = require("laserManager")
 
+local MeleeAttackMgr = require("meleeAttack")
+
 -- Virtual key codes (Windows)
 local VK_LEFT  = 0x25
 local VK_UP    = 0x26
@@ -72,6 +74,8 @@ function Tick()
   EnemyMgr.Update(player, windowWidth, windowHeight)
   LaserMgr.Update(windowWidth, windowHeight)
 
+  MeleeAttackMgr.Update(Engine, keys, player)
+
   if LaserMgr.DamagePlayerIfHit(player) then
     player.hp = player.hp - 1
 
@@ -88,6 +92,7 @@ else
     player.hp = 10
     LaserMgr.ResetAllLasers()
     EnemyMgr.ResetAllEnemies()
+    MeleeAttackMgr.Reset()
   end
 end
       
@@ -98,6 +103,10 @@ function Paint(l, t, r, b)
   
   if gameLost == false then
   Engine:FillWindowRect(COLOR_PURPLE)
+
+  -- Melee hitbox follows player
+  MeleeAttackMgr.Draw(Engine, COLOR_PINK)
+
     -- Player
   Engine:SetColor(COLOR_CYAN)
   Engine:FillRect(player.x, player.y, player.x + player.playerRectSize, player.y + player.playerRectSize)
@@ -108,9 +117,10 @@ function Paint(l, t, r, b)
 
   -- UI text
   Engine:SetColor(COLOR_GRAY_LIGHT)
-  Engine:DrawString("Arrows - move, ESC - quits", 10, 10)
-  Engine:DrawString("Shift - Run, Alt - dash", 10, 30)
-  Engine:DrawString("Space - Melee", 10, 50)
+  Engine:DrawString("Arrows - move", 10, 10)
+  Engine:DrawString("Shift - run, Alt - dash", 10, 30)
+  Engine:DrawString("SPACE - melee", 10, 50)
+  Engine:DrawString("Escape - quit", 10, 570)
   else
   Engine:FillWindowRect(COLOR_GRAY_DARK)
 
