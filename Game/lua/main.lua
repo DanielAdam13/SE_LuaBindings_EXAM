@@ -1,6 +1,10 @@
 local PlayerMod = require("player")
 local player = PlayerMod.player
 
+local EnemyMgr = require("enemyManager")
+
+local LaserMgr = require("laserManager")
+
 -- Virtual key codes (Windows)
 local VK_LEFT  = 0x25
 local VK_UP    = 0x26
@@ -37,6 +41,8 @@ local COLOR_ORANGE     = 0x00A5FF
 local COLOR_PURPLE     = 0x800080
 local COLOR_PINK       = 0xCBC0FF
 
+local objectColors = {ENEMY = COLOR_ORANGE, LASER = COLOR_RED}
+
 -- Window Size
 local windowWidth = 800
 local windowHeight = 600
@@ -48,11 +54,22 @@ function Initialize()
   Engine:SetTitle("Dodge_Out")
 end
 
+function Start()
+  math.randomseed(os.time())
+end
+
 function Tick()
   Engine:Repaint()
 
   PlayerMod.Update(Engine, keys)
   PlayerMod.SetBounds(windowWidth, windowHeight)
+
+  EnemyMgr.Update(player, windowWidth, windowHeight)
+  LaserMgr.Update()
+
+  if LaserMgr.DamagePlayerIfHit(player) then
+    player.hp = player.hp - 1
+  end
       
   if Engine:IsKeyDown(VK_ESC) then Engine:Quit() end
 end
@@ -65,11 +82,18 @@ function Paint(l, t, r, b)
   Engine:SetColor(COLOR_CYAN)
   Engine:FillRect(player.x, player.y, player.x + player.playerRectSize, player.y + player.playerRectSize)
 
+  -- Enemies and Lasers
+  EnemyMgr.Draw(Engine, objectColors)
+  LaserMgr.Draw(Engine, objectColors)
+
   -- UI text
-  Engine:SetColor(COLOR_GRAY_DARK)
+  Engine:SetColor(COLOR_GRAY_LIGHT)
   Engine:DrawString("Arrows - move, ESC - quits", 10, 10)
   Engine:DrawString("Shift - Run, Alt - dash", 10, 30)
   Engine:DrawString("Space - Melee", 10, 50)
+
+  Engine:SetColor(COLOR_RED)
+  Engine:DrawString(string.format("HEALTH: %d", player.hp), windowWidth - 100, 10)
 end
 
 function End()

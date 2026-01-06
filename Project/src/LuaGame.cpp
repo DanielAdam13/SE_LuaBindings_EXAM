@@ -70,6 +70,17 @@ if (!oncePaint) {
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
+
+// sol::protected_function f = m_Lua["Paint"];
+//     if (f.valid())
+//     {
+//         sol::protected_function_result r = f();
+//         if (!r.valid())
+//         {
+//             sol::error err = r;
+//             OutputDebugStringA(err.what());
+//         }
+//     }
     
    
 }
