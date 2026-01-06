@@ -5,11 +5,11 @@ M.lasers = {}
 -- ============================
 -- Tweakables
 -- ============================
-M.thinThickness  = 10
-M.thickThickness = 25
+M.thinThickness  = 10 -- non-active thickness
+M.thickThickness = 25 -- active thickness
 
-M.telegraphTicksMax = 100
-M.activeTicksMax    = 25
+M.telegraphTicksMax = 100 -- interval before non-active and active state
+M.activeTicksMax    = 25 -- active ticks before deleting laser
 
 -- ============================
 -- Utilities
@@ -30,7 +30,7 @@ end
 -- ============================
 -- Spawn laser
 -- ============================
-function M.Spawn(enemy, player, windowWidth, windowHeight)
+function M.Spawn(enemy, player, windowWidth, windowHeight, enemyId) 
   local px = math.floor(player.x + player.playerRectSize / 2)
   local py = math.floor(player.y + player.playerRectSize / 2)
 
@@ -54,6 +54,7 @@ function M.Spawn(enemy, player, windowWidth, windowHeight)
   end
 
   M.lasers[#M.lasers + 1] = {
+    ownerId = enemyId,
     x = math.floor(lx),
     y = math.floor(ly),
     w = math.floor(lw),
@@ -67,6 +68,17 @@ function M.Spawn(enemy, player, windowWidth, windowHeight)
     isActive = false,
     didHit   = false
   }
+end
+
+-- ============================
+-- Remove all lasers per enemy
+-- ============================
+function M.RemoveLasersByOwner(enemyId)
+  for i = #M.lasers, 1, -1 do
+    if M.lasers[i].ownerId == enemyId then
+      table.remove(M.lasers, i)
+    end
+  end
 end
 
 -- ============================

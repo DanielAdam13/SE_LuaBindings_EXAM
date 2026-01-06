@@ -4,19 +4,28 @@ local LaserMgr = require("laserManager")
 local M = {}
 
 M.enemies = {}
+M.nextEnemyId = 1
 
--- tweakables (ticks)
 M.spawnCooldown = 0
-M.spawnCooldownMax = 120
-M.telegraphTicksMax = 40
+M.spawnCooldownMax = 75 -- enemy spawn cooldown
+M.telegraphTicksMax = 40 -- interval before shooting laser
 
 -- sizes
-M.enemySize = 26
+M.enemySize = 28
 
+------------------------
+-- HELPERS
+------------------------
 local function Clamp(v, lo, hi)
   if v < lo then return lo end
   if v > hi then return hi end
   return v
+end
+local function AABB(ax, ay, aw, ah, bx, by, bw, bh)
+  return ax < bx + bw and
+         ax + aw > bx and
+         ay < by + bh and
+         ay + ah > by
 end
 
 local function SpawnEnemyAtEdge(windowWidth, windowHeight)
@@ -38,11 +47,13 @@ local function SpawnEnemyAtEdge(windowWidth, windowHeight)
   end
 
  M.enemies[#M.enemies + 1] = {
+    id = M.nextEnemyId,
   x = ex,
   y = ey,
   size = M.enemySize,
   telegraphTicks = M.telegraphTicksMax
 }
+M.nextEnemyId = M.nextEnemyId + 1
 
 end
 
@@ -77,6 +88,20 @@ function M.Draw(Engine, colors)
     Engine:FillRect(e.x, e.y, e.x + e.size, e.y + e.size)
   end
 
+end
+
+
+function M.KillEnemiesHitByMelee(meleeMgr, laserMgr)
+  local mx, my, mw, mh = meleeMgr.GetRect()
+  if not mx then return end
+
+  for i = #M.enemies, 1, -1 do
+    local e = M.enemies[i]
+    if AABB(mx, my, mw, mh, e.x, e.y, e.size, e.size) then
+      laserMgr.RemoveLasersByOwner(e.id) -- delete its lasers
+      table.remove(M.enemies, i)         -- delete enemy
+    end
+  end
 end
 
 

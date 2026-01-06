@@ -75,6 +75,7 @@ function Tick()
   LaserMgr.Update(windowWidth, windowHeight)
 
   MeleeAttackMgr.Update(Engine, keys, player)
+  EnemyMgr.KillEnemiesHitByMelee(MeleeAttackMgr, LaserMgr)
 
   if LaserMgr.DamagePlayerIfHit(player) then
     player.hp = player.hp - 1

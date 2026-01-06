@@ -65,4 +65,12 @@ function M.Reset()
   M.prevSpaceDown = false
 end
 
+-- MELEE ATTACK COLLIDER
+function M.GetRect()
+  if not M.active then 
+    return nil end
+
+  return M.x, M.y, M.size, M.size
+end
+
 return M
