@@ -5,8 +5,8 @@ M.lasers = {}
 -- ============================
 -- Tweakables
 -- ============================
-M.thinThickness  = 12
-M.thickThickness = 28
+M.thinThickness  = 10
+M.thickThickness = 25
 
 M.telegraphTicksMax = 100
 M.activeTicksMax    = 25
@@ -140,6 +140,16 @@ function M.Draw(Engine, colors)
   else Engine:SetColor(0x808080) 
   end
     Engine:FillRect(L.x, L.y, L.x + L.w, L.y + L.h)
+  end
+end
+
+-- ============================
+-- Delete ALL Lasers
+-- ============================
+function M.ResetAllLasers()
+  
+  for i = #M.lasers, 1, -1 do
+    table.remove(M.lasers, i)
   end
 end
 

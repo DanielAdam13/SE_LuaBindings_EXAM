@@ -15,6 +15,7 @@ local VK_SPACE  = 0x20
 local VK_SHIFT  = 0x10 
 local VK_CONTROL = 0x11 
 local VK_ALT = 0x12
+local VK_R = 0x52
 
 local keys = {
   LEFT = VK_LEFT, RIGHT = VK_RIGHT, UP = VK_UP, DOWN = VK_DOWN, ESC = VK_ESC, 
@@ -47,6 +48,9 @@ local objectColors = {ENEMY = COLOR_ORANGE, LASER = COLOR_RED}
 local windowWidth = 800
 local windowHeight = 600
 
+-- Game State
+local gameLost = false
+
 function Initialize()
   Engine:SetWidth(windowWidth)
   Engine:SetHeight(windowHeight)
@@ -61,6 +65,7 @@ end
 function Tick()
   Engine:Repaint()
 
+  if gameLost == false then
   PlayerMod.Update(Engine, keys)
   PlayerMod.SetBounds(windowWidth, windowHeight)
 
@@ -69,16 +74,31 @@ function Tick()
 
   if LaserMgr.DamagePlayerIfHit(player) then
     player.hp = player.hp - 1
+
+    if player.hp <= 0 then
+    player.hp = 0
+    gameLost = true
+    end
   end
+else
+  -- Logic When Game Lost
+  if Engine:IsKeyDown(VK_R) then 
+    -- Restart...
+    gameLost = false
+    player.hp = 10
+    LaserMgr.ResetAllLasers()
+    EnemyMgr.ResetAllEnemies()
+  end
+end
       
   if Engine:IsKeyDown(VK_ESC) then Engine:Quit() end
 end
 
 function Paint(l, t, r, b)
-  -- Background
+  
+  if gameLost == false then
   Engine:FillWindowRect(COLOR_PURPLE)
-
-  -- Player
+    -- Player
   Engine:SetColor(COLOR_CYAN)
   Engine:FillRect(player.x, player.y, player.x + player.playerRectSize, player.y + player.playerRectSize)
 
@@ -91,6 +111,15 @@ function Paint(l, t, r, b)
   Engine:DrawString("Arrows - move, ESC - quits", 10, 10)
   Engine:DrawString("Shift - Run, Alt - dash", 10, 30)
   Engine:DrawString("Space - Melee", 10, 50)
+  else
+  Engine:FillWindowRect(COLOR_GRAY_DARK)
+
+  -- UI text
+  Engine:SetColor(COLOR_RED)
+  Engine:DrawString("YOU LOST", 370, 220)
+  Engine:DrawString("Try Again? ----> Press R", 320, 300)
+  Engine:DrawString("Exit Game ----> Press ESC", 320, 500)
+  end
 
   Engine:SetColor(COLOR_RED)
   Engine:DrawString(string.format("HEALTH: %d", player.hp), windowWidth - 100, 10)

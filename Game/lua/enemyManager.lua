@@ -70,13 +70,24 @@ function M.Update(player, windowWidth, windowHeight)
 end
 
 function M.Draw(Engine, colors)
-    
+
   Engine:SetColor(colors.ENEMY)
   for i = 1, #M.enemies do
     local e = M.enemies[i]
     Engine:FillRect(e.x, e.y, e.x + e.size, e.y + e.size)
   end
 
+end
+
+
+-- ============================
+-- Delete ALL Enemies
+-- ============================
+function M.ResetAllEnemies()
+  
+  for i = #M.enemies, 1, -1 do
+    table.remove(M.enemies, i)
+  end
 end
 
 return M
