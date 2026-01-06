@@ -65,7 +65,7 @@ function Tick()
   PlayerMod.SetBounds(windowWidth, windowHeight)
 
   EnemyMgr.Update(player, windowWidth, windowHeight)
-  LaserMgr.Update()
+  LaserMgr.Update(windowWidth, windowHeight)
 
   if LaserMgr.DamagePlayerIfHit(player) then
     player.hp = player.hp - 1
