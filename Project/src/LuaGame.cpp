@@ -19,8 +19,6 @@ if (!onceInit) { onceInit = true; ::MessageBoxA(nullptr, "LuaGame::Initialize ca
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-   
 }
 
 void LuaGame::Start()
@@ -70,19 +68,6 @@ if (!oncePaint) {
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-
-// sol::protected_function f = m_Lua["Paint"];
-//     if (f.valid())
-//     {
-//         sol::protected_function_result r = f();
-//         if (!r.valid())
-//         {
-//             sol::error err = r;
-//             OutputDebugStringA(err.what());
-//         }
-//     }
-    
-   
 }
 
 void LuaGame::End()
@@ -96,8 +81,6 @@ void LuaGame::End()
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-   
 }
 
 void LuaGame::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wParam)
@@ -111,8 +94,6 @@ void LuaGame::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM w
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-    
 }
 
 void LuaGame::MouseWheelAction(int x, int y, int distance, WPARAM wParam)
@@ -126,8 +107,6 @@ void LuaGame::MouseWheelAction(int x, int y, int distance, WPARAM wParam)
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-    
 }
 
 void LuaGame::MouseMove(int x, int y, WPARAM wParam)
@@ -141,8 +120,6 @@ void LuaGame::MouseMove(int x, int y, WPARAM wParam)
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-    
 }
 
 void LuaGame::CheckKeyboard()
@@ -156,15 +133,13 @@ void LuaGame::CheckKeyboard()
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-   
 }
 
 void LuaGame::KeyPressed(TCHAR key)
 {
     try
     {
-        // easiest: pass key code as number (works for wchar_t too)
+        // pass key code as number (for wchar_t)
         if (auto f = m_Lua["KeyPressed"]; f.valid())
         f(static_cast<int>(key));
     }
@@ -172,6 +147,4 @@ void LuaGame::KeyPressed(TCHAR key)
     ::MessageBoxA(nullptr, e.what(), "Lua callback error", MB_OK | MB_ICONERROR);
     if (GAME_ENGINE) GAME_ENGINE->Quit();
     }
-    
-   
 }
