@@ -1,11 +1,15 @@
 local Player = require("player")
 local player1 = Player.new()
 
-local EnemyMgr = require("enemyManager")
+local EnemyManager = require("enemyManager")
+local LaserManager = require("laserManager")
 
-local LaserMgr = require("laserManager")
+local Lasers  = LaserManager.new()
+local Enemies = EnemyManager.new(Lasers)
+
 
 local MeleeAttackMgr = require("meleeAttack")
+local Melee = MeleeAttackMgr.new()
 
 -- Virtual key codes (Windows)
 local VK_LEFT  = 0x25
@@ -71,13 +75,13 @@ function Tick()
   player1:Update(Engine, keys)
   player1:SetBounds(windowWidth, windowHeight)
 
-  EnemyMgr.Update(player1, windowWidth, windowHeight)
-  LaserMgr.Update(windowWidth, windowHeight)
+  Enemies:Update(player1, windowWidth, windowHeight)
+  Lasers:Update(windowWidth, windowHeight)
 
-  MeleeAttackMgr.Update(Engine, keys, player1)
-  EnemyMgr.KillEnemiesHitByMelee(MeleeAttackMgr, LaserMgr)
+  Melee:Update(Engine, keys, player1)
+  Enemies:KillEnemiesHitByMelee(Melee, Lasers)
 
-  if LaserMgr.DamagePlayerIfHit(player1, player1:IsDashing()) then
+  if Lasers:DamagePlayerIfHit(player1, player1:IsDashing()) then
     player1.hp = player1.hp - 1
 
     if player1.hp <= 0 then
@@ -91,9 +95,9 @@ else
     -- Restart...
     gameLost = false
     player1.hp = 10
-    LaserMgr.ResetAllLasers()
-    EnemyMgr.ResetAllEnemies()
-    MeleeAttackMgr.Reset()
+    Lasers:ResetAllLasers()
+    Enemies:ResetAllEnemies()
+    Melee:Reset()
   end
 end
       
@@ -106,15 +110,15 @@ function Paint(l, t, r, b)
   Engine:FillWindowRect(COLOR_PURPLE)
 
   -- Melee hitbox follows player
-  MeleeAttackMgr.Draw(Engine, COLOR_PINK)
+  Melee:Draw(Engine, COLOR_PINK)
 
     -- Player
   Engine:SetColor(COLOR_CYAN)
   Engine:FillRect(player1.x, player1.y, player1.x + player1.playerRectSize, player1.y + player1.playerRectSize)
 
   -- Enemies and Lasers
-  EnemyMgr.Draw(Engine, objectColors)
-  LaserMgr.Draw(Engine, objectColors)
+  Enemies:Draw(Engine, objectColors)
+  Lasers:Draw(Engine, objectColors)
 
   -- UI text
   Engine:SetColor(COLOR_GRAY_LIGHT)
@@ -124,7 +128,7 @@ function Paint(l, t, r, b)
   Engine:DrawString("Escape - quit", 10, 570)
 
   Engine:SetColor(COLOR_BLUE)
-  Engine:DrawString(string.format("SCORE: %d", EnemyMgr.score), 360, 30)
+  Engine:DrawString(string.format("SCORE: %d", Enemies.score), 360, 30)
   else
   Engine:FillWindowRect(COLOR_GRAY_DARK)
 
@@ -135,7 +139,7 @@ function Paint(l, t, r, b)
   Engine:DrawString("Exit Game ----> Press ESC", 320, 500)
 
   Engine:SetColor(COLOR_WHITE)
-  Engine:DrawString(string.format("SCORE: %d", EnemyMgr.score), 360, 30)
+  Engine:DrawString(string.format("SCORE: %d", Enemies.score), 360, 30)
   end
 
   Engine:SetColor(COLOR_RED)

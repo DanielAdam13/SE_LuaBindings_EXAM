@@ -1,4 +1,3 @@
--- lua/player.lua
 local Player = {}
 
 Player.__index = Player
