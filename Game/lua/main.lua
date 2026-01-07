@@ -122,6 +122,9 @@ function Paint(l, t, r, b)
   Engine:DrawString("Shift - run, Alt - dash", 10, 30)
   Engine:DrawString("SPACE - melee", 10, 50)
   Engine:DrawString("Escape - quit", 10, 570)
+
+  Engine:SetColor(COLOR_BLUE)
+  Engine:DrawString(string.format("SCORE: %d", EnemyMgr.score), 360, 30)
   else
   Engine:FillWindowRect(COLOR_GRAY_DARK)
 
@@ -130,10 +133,15 @@ function Paint(l, t, r, b)
   Engine:DrawString("YOU LOST", 370, 220)
   Engine:DrawString("Try Again? ----> Press R", 320, 300)
   Engine:DrawString("Exit Game ----> Press ESC", 320, 500)
+
+  Engine:SetColor(COLOR_WHITE)
+  Engine:DrawString(string.format("SCORE: %d", EnemyMgr.score), 360, 30)
   end
 
   Engine:SetColor(COLOR_RED)
   Engine:DrawString(string.format("HEALTH: %d", player.hp), windowWidth - 100, 10)
+
+  
 end
 
 function End()

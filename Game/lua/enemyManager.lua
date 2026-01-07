@@ -13,6 +13,9 @@ M.telegraphTicksMax = 40 -- interval before shooting laser
 -- sizes
 M.enemySize = 28
 
+-- SCORE
+M.score = 0
+
 ------------------------
 -- HELPERS
 ------------------------
@@ -101,6 +104,7 @@ function M.KillEnemiesHitByMelee(meleeMgr, laserMgr)
     if AABB(mx, my, mw, mh, e.x, e.y, e.size, e.size) then
       laserMgr.RemoveLasersByOwner(e.id) -- delete its lasers
       table.remove(M.enemies, i)         -- delete enemy
+      M.score = M.score + 10
     end
   end
 end
@@ -114,6 +118,8 @@ function M.ResetAllEnemies()
   for i = #M.enemies, 1, -1 do
     table.remove(M.enemies, i)
   end
+  M.score = 0
+  
 end
 
 return M
