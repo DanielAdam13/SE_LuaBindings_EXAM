@@ -1,5 +1,5 @@
-local PlayerMod = require("player")
-local player = PlayerMod.player
+local Player = require("player")
+local player1 = Player.new()
 
 local EnemyMgr = require("enemyManager")
 
@@ -68,20 +68,20 @@ function Tick()
   Engine:Repaint()
 
   if gameLost == false then
-  PlayerMod.Update(Engine, keys)
-  PlayerMod.SetBounds(windowWidth, windowHeight)
+  player1:Update(Engine, keys)
+  player1:SetBounds(windowWidth, windowHeight)
 
-  EnemyMgr.Update(player, windowWidth, windowHeight)
+  EnemyMgr.Update(player1, windowWidth, windowHeight)
   LaserMgr.Update(windowWidth, windowHeight)
 
-  MeleeAttackMgr.Update(Engine, keys, player)
+  MeleeAttackMgr.Update(Engine, keys, player1)
   EnemyMgr.KillEnemiesHitByMelee(MeleeAttackMgr, LaserMgr)
 
-  if LaserMgr.DamagePlayerIfHit(player, PlayerMod.IsDashing()) then
-    player.hp = player.hp - 1
+  if LaserMgr.DamagePlayerIfHit(player1, player1:IsDashing()) then
+    player1.hp = player1.hp - 1
 
-    if player.hp <= 0 then
-    player.hp = 0
+    if player1.hp <= 0 then
+    player1.hp = 0
     gameLost = true
     end
   end
@@ -90,7 +90,7 @@ else
   if Engine:IsKeyDown(VK_R) then 
     -- Restart...
     gameLost = false
-    player.hp = 10
+    player1.hp = 10
     LaserMgr.ResetAllLasers()
     EnemyMgr.ResetAllEnemies()
     MeleeAttackMgr.Reset()
@@ -110,7 +110,7 @@ function Paint(l, t, r, b)
 
     -- Player
   Engine:SetColor(COLOR_CYAN)
-  Engine:FillRect(player.x, player.y, player.x + player.playerRectSize, player.y + player.playerRectSize)
+  Engine:FillRect(player1.x, player1.y, player1.x + player1.playerRectSize, player1.y + player1.playerRectSize)
 
   -- Enemies and Lasers
   EnemyMgr.Draw(Engine, objectColors)
@@ -139,7 +139,7 @@ function Paint(l, t, r, b)
   end
 
   Engine:SetColor(COLOR_RED)
-  Engine:DrawString(string.format("HEALTH: %d", player.hp), windowWidth - 100, 10)
+  Engine:DrawString(string.format("HEALTH: %d", player1.hp), windowWidth - 100, 10)
 
   
 end

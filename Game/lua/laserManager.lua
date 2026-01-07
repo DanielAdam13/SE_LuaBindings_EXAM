@@ -42,8 +42,8 @@ function M.Spawn(enemy, player, windowWidth, windowHeight, enemyId)
   local lx, ly, lw, lh
 
   if horizontal then
-    ly = Clamp(py - M.thinThickness // 2, 0, windowHeight - M.thinThickness)
     lx = 0
+    ly = Clamp(py - M.thinThickness // 2, 0, windowHeight - M.thinThickness)
     lw = windowWidth
     lh = M.thinThickness
   else

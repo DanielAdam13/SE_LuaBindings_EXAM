@@ -1,64 +1,87 @@
 -- lua/player.lua
-local M = {}
+local Player = {}
 
-M.player = {
-  x = 100,
-  y = 100,
-  playerRectSize = 40,
-  walkSpeed = 3,
-  runSpeed = 7,
-  speed = walkSpeed,
-  hp = 10,
-  dashSpeed = 20,
-  dashTickMax = 8,
-  dashCooldownMax = 30
-}
+Player.__index = Player
 
--- Dash state variables
-M.dashTicks = 0
-M.dashCooldown = 0
-M.prevAltDown = false
+function Player.new()
+  local self = setmetatable({}, Player)
+  -- Position / size
+  self.x = 100
+  self.y = 100
+  self.playerRectSize = 40
 
-function M.SetBounds(windowWidth, windowHeight)
-  local p = M.player
-  if p.x < 0 then p.x = 0 end
-  if p.x > windowWidth - p.playerRectSize then p.x = windowWidth - p.playerRectSize end
-  if p.y < 0 then p.y = 0 end
-  if p.y > windowHeight - p.playerRectSize then p.y = windowHeight - p.playerRectSize end
+  -- Movement
+  self.walkSpeed = 3
+  self.runSpeed  = 7
+  self.dashSpeed = 20
+  self.speed     = self.walkSpeed
+
+  -- Dash
+  self.dashTickMax      = 8
+  self.dashCooldownMax = 30
+  self.dashTicks       = 0
+  self.dashCooldown    = 0
+  self.prevAltDown     = false
+
+  -- Health
+  self.hp = 10
+
+  return self
 end
 
-function M.DashLogic(Engine, keys)
-  if M.dashCooldown > 0 then M.dashCooldown = M.dashCooldown - 1 end
+function Player:SetBounds(windowWidth, windowHeight)
+  if self.x < 0 then self.x = 0 end
+  if self.y < 0 then self.y = 0 end
 
-  local altDown = Engine:IsKeyDown(keys.ALT)
-  local altPressed = (altDown and not M.prevAltDown)
-  M.prevAltDown = altDown
+  if self.x > windowWidth - self.playerRectSize then
+    self.x = windowWidth - self.playerRectSize
+  end
 
-  if altPressed and M.dashCooldown == 0 and M.dashTicks == 0 then
-    M.dashTicks = M.player.dashTickMax
-    M.dashCooldown = M.player.dashCooldownMax
+  if self.y > windowHeight - self.playerRectSize then
+    self.y = windowHeight - self.playerRectSize
   end
 end
 
-function M.Update(Engine, keys)
-  M.DashLogic(Engine, keys)
+function Player:DashLogic(Engine, keys)
+  if self.dashCooldown > 0 then
+    self.dashCooldown = self.dashCooldown - 1
+  end
 
-  local p = M.player
-  p.speed = p.walkSpeed
+  local altDown = Engine:IsKeyDown(keys.ALT)
+  local altPressed = altDown and not self.prevAltDown
+  self.prevAltDown = altDown
 
-  if Engine:IsKeyDown(keys.SHIFT) then p.speed = p.runSpeed end
-  if M.dashTicks > 0 then p.speed = p.dashSpeed end
-
-  if Engine:IsKeyDown(keys.LEFT)  then p.x = p.x - p.speed end
-  if Engine:IsKeyDown(keys.RIGHT) then p.x = p.x + p.speed end
-  if Engine:IsKeyDown(keys.UP)    then p.y = p.y - p.speed end
-  if Engine:IsKeyDown(keys.DOWN)  then p.y = p.y + p.speed end
-
-  if M.dashTicks > 0 then M.dashTicks = M.dashTicks - 1 end
+  if altPressed and self.dashCooldown == 0 and self.dashTicks == 0 then
+    self.dashTicks    = self.dashTickMax
+    self.dashCooldown = self.dashCooldownMax
+  end
 end
 
-function M.IsDashing()
-    return M.dashTicks > 0
+function Player:Update(Engine, keys)
+  self:DashLogic(Engine, keys)
+
+  self.speed = self.walkSpeed
+
+  if Engine:IsKeyDown(keys.SHIFT) then
+    self.speed = self.runSpeed
+  end
+
+  if self.dashTicks > 0 then
+    self.speed = self.dashSpeed
+  end
+
+  if Engine:IsKeyDown(keys.LEFT)  then self.x = self.x - self.speed end
+  if Engine:IsKeyDown(keys.RIGHT) then self.x = self.x + self.speed end
+  if Engine:IsKeyDown(keys.UP)    then self.y = self.y - self.speed end
+  if Engine:IsKeyDown(keys.DOWN)  then self.y = self.y + self.speed end
+
+  if self.dashTicks > 0 then
+    self.dashTicks = self.dashTicks - 1
+  end
 end
 
-return M
+function Player:IsDashing()
+  return self.dashTicks > 0
+end
+
+return Player
