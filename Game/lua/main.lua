@@ -1,5 +1,5 @@
-local Player = require("player") -- import module
-local player1 = Player.new()
+local player = require("player") -- import module
+local player1 = player.new()
 
 local EnemyManager = require("enemyManager") -- import module
 local LaserManager = require("laserManager") -- import module

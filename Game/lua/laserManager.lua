@@ -69,7 +69,8 @@ end
 function LaserManager:Update(w, h)
   for i = #self.lasers, 1, -1 do
     local L = self.lasers[i]
-
+    
+    if L then
     if not L.isActive then
       L.telegraphTicks = L.telegraphTicks - 1
       if L.telegraphTicks <= 0 then
@@ -92,6 +93,7 @@ function LaserManager:Update(w, h)
       end
     end
   end
+end
 end
 
 

@@ -67,12 +67,11 @@ function EnemyManager:Update(player, w, h)
   end
 
   for i = #self.enemies, 1, -1 do
-    local e = self.enemies[i]
-    e.telegraphTicks = e.telegraphTicks - 1 -- Countdown telegraphing laser
+    self.enemies[i].telegraphTicks = self.enemies[i].telegraphTicks - 1 -- Countdown telegraphing laser
 
-    if e.telegraphTicks <= 0 then
-      self.laserMgr:Spawn(e, player, w, h)
-      e.telegraphTicks = self.telegraphTicksMax
+    if self.enemies[i].telegraphTicks <= 0 then
+      self.laserMgr:Spawn(self.enemies[i], player, w, h)
+      self.enemies[i].telegraphTicks = self.telegraphTicksMax
     end
   end
 end
@@ -93,8 +92,7 @@ function EnemyManager:KillEnemiesHitByMelee(meleeMgr, laserMgr)
   if not mx then return end
 
   for i = #self.enemies, 1, -1 do
-    local e = self.enemies[i]
-    if AABB(mx, my, mw, mh, e.x, e.y, e.size, e.size) then
+    if AABB(mx, my, mw, mh, self.enemies[i].x, self.enemies[i].y, self.enemies[i].size, self.enemies[i].size) then
       --laserMgr:RemoveLasersByOwner(e.id)
       table.remove(self.enemies, i)
       self.score = self.score + 10
