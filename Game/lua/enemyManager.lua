@@ -1,7 +1,7 @@
 local EnemyManager = {}
 EnemyManager.__index = EnemyManager
 
-local LaserMgr = require("laserManager")
+local LaserMgr = require("laserManager") -- module
 
 ------------------------------------------------
 -- Constructor
@@ -24,6 +24,9 @@ function EnemyManager.new(laserManager)
   return self
 end
 
+-- Module Methods...
+
+-- Helper function
 local function AABB(ax, ay, aw, ah, bx, by, bw, bh)
   return ax < bx + bw and ax + aw > bx and
          ay < by + bh and ay + ah > by
@@ -51,20 +54,21 @@ function EnemyManager:SpawnEnemyAtEdge(w, h)
     telegraphTicks = self.telegraphTicksMax
   }
 
+  -- Increment next enemy Id for when it is spawned
   self.nextEnemyId = self.nextEnemyId + 1
 end
 
 function EnemyManager:Update(player, w, h)
   if self.spawnCooldown > 0 then
-    self.spawnCooldown = self.spawnCooldown - 1
+    self.spawnCooldown = self.spawnCooldown - 1 -- Countdown spawn
   else
     self:SpawnEnemyAtEdge(w, h)
-    self.spawnCooldown = self.spawnCooldownMax
+    self.spawnCooldown = self.spawnCooldownMax -- Reset cooldown
   end
 
   for i = #self.enemies, 1, -1 do
     local e = self.enemies[i]
-    e.telegraphTicks = e.telegraphTicks - 1
+    e.telegraphTicks = e.telegraphTicks - 1 -- Countdown telegraphing laser
 
     if e.telegraphTicks <= 0 then
       self.laserMgr:Spawn(e, player, w, h)

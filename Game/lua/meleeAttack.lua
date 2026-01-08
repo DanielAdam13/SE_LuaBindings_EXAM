@@ -29,6 +29,8 @@ function MeleeManager.new()
   return self
 end
 
+-- Module Methods...
+
 ------------------------------------------------
 -- Input / activation
 ------------------------------------------------

@@ -39,6 +39,7 @@ function LaserManager:Spawn(enemy, player, w, h)
   local ex = enemy.x + enemy.size / 2
   local ey = enemy.y + enemy.size / 2
 
+  -- Decide state
   local horizontal = math.abs(px - ex) >= math.abs(py - ey)
   local x, y, lw, lh
 
@@ -52,6 +53,7 @@ function LaserManager:Spawn(enemy, player, w, h)
     lw = self.thinThickness; lh = h
   end
 
+  -- Add new laser to the table
   self.lasers[#self.lasers + 1] = {
     ownerId = enemy.id,
     x = x, y = y,
@@ -94,7 +96,7 @@ end
 
 
 function LaserManager:DamagePlayerIfHit(player, isInvulnerable)
-  if isInvulnerable then return false end
+  if isInvulnerable then return false end -- isInvulnerable is a boolean
 
   for _, L in ipairs(self.lasers) do
     if L.isActive and not L.didHit then
@@ -111,7 +113,11 @@ end
 
 function LaserManager:Draw(Engine, colors)
   for _, L in ipairs(self.lasers) do
-    Engine:SetColor(L.isActive and colors.LASER or 0x808080)
+    if L.isActive then
+    Engine:SetColor(colors.LASER)
+    else
+    Engine:SetColor(0x808080)
+    end
     Engine:FillRect(L.x, L.y, L.x + L.w, L.y + L.h)
   end
 end

@@ -28,6 +28,7 @@ function Player.new()
   return self
 end
 
+-- Module Methods...
 function Player:SetBounds(windowWidth, windowHeight)
   if self.x < 0 then self.x = 0 end
   if self.y < 0 then self.y = 0 end

@@ -17,7 +17,7 @@ EngineLuaBindings::EngineLuaBindings()
 {
     m_Lua.open_libraries(
         sol::lib::base, sol::lib::math, sol::lib::table, sol::lib::string,
-        sol::lib::package, sol::lib::coroutine, sol::lib::utf8
+        sol::lib::package, sol::lib::utf8
     );
 
     m_Lua["package"]["path"] =
@@ -29,21 +29,40 @@ void EngineLuaBindings::BindAll()
     // Global pointer to engine singleton
     m_Lua["Engine"] = GAME_ENGINE;
 
+    m_Lua.new_usertype<POINT>("Point",
+    sol::no_constructor,
+    "x", &POINT::x,
+    "y", &POINT::y
+    );
+
+    m_Lua.new_usertype<SIZE>("Size",
+    sol::no_constructor,
+    "w", &SIZE::cx,
+    "h", &SIZE::cy
+    );
+
     // Bind GameEngine methods (expand this list over time)
     m_Lua.new_usertype<GameEngine>("GameEngine",
         sol::no_constructor,
 
         // Window / control
         "SetTitle", &GameEngine::SetTitle,           // PROBLEMATIC WITH tstring and UNICODE
+        "SetWindowPosition", &GameEngine::SetWindowPosition,
         "SetWidth", &GameEngine::SetWidth,
         "SetHeight", &GameEngine::SetHeight,
+        "SetKeyList", &GameEngine::SetKeyList,
         "SetFrameRate", &GameEngine::SetFrameRate,
         "Quit", &GameEngine::Quit,
         "Repaint", &GameEngine::Repaint,
 
         "GoFullscreen", &GameEngine::GoFullscreen,
+        "GoWindowedMode", &GameEngine::GoWindowedMode,
+        "ShowMousePointer", &GameEngine::ShowMousePointer,
+
+        "HasWindowRegion", &GameEngine::HasWindowRegion,
         "IsFullScreen", &GameEngine::IsFullscreen,
 
+        "GetTitle", &GameEngine::GetTitle,
         "GetWidth", &GameEngine::GetWidth,
         "GetHeight", &GameEngine::GetHeight,
         "GetFrameRate", &GameEngine::GetFrameRate,
@@ -51,6 +70,8 @@ void EngineLuaBindings::BindAll()
 
         // Input
         "IsKeyDown", &GameEngine::IsKeyDown,
+
+        "CalculateTextDimensions", static_cast<SIZE (GameEngine::*) (const tstring&, const Font*) const>(&GameEngine::CalculateTextDimensions),
 
         // Drawing
         "SetColor", &GameEngine::SetColor,
@@ -68,7 +89,9 @@ void EngineLuaBindings::BindAll()
         "DrawString", sol::overload(
         static_cast<int (GameEngine::*)(const tstring&, int, int) const>(&GameEngine::DrawString),
         static_cast<int (GameEngine::*)(const tstring&, int, int, int, int) const>(&GameEngine::DrawString)
-    )
+        ),
+
+        "GetWindowPosition", &GameEngine::GetWindowPosition
     );
 }
 

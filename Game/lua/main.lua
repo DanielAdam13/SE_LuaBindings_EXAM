@@ -1,14 +1,13 @@
-local Player = require("player")
+local Player = require("player") -- import module
 local player1 = Player.new()
 
-local EnemyManager = require("enemyManager")
-local LaserManager = require("laserManager")
+local EnemyManager = require("enemyManager") -- import module
+local LaserManager = require("laserManager") -- import module
 
 local Lasers  = LaserManager.new()
 local Enemies = EnemyManager.new(Lasers)
 
-
-local MeleeAttackMgr = require("meleeAttack")
+local MeleeAttackMgr = require("meleeAttack") -- import module
 local Melee = MeleeAttackMgr.new()
 
 -- Virtual key codes (Windows)
@@ -65,8 +64,10 @@ function Initialize()
 end
 
 function Start()
-  math.randomseed(os.time())
+  math.randomseed(os.time()) -- Random seed
 end
+
+local count = 0
 
 function Tick()
   Engine:Repaint()
@@ -100,8 +101,10 @@ else
     Melee:Reset()
   end
 end
-      
-  if Engine:IsKeyDown(VK_ESC) then Engine:Quit() end
+  
+  if Engine:IsKeyDown(VK_CONTROL) and count == 0 then Enemies:SpawnEnemyAtEdge(windowWidth, windowHeight) count = count + 1 end
+  
+  if Engine:IsKeyDown(VK_ESC)  then Engine:Quit() end
 end
 
 function Paint(l, t, r, b)

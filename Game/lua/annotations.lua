@@ -1,4 +1,5 @@
 ---@meta
+
 ---@class GameEngine
 local GameEngine = {}
 
@@ -15,23 +16,31 @@ function GameEngine:SetHeight(h) end
 function GameEngine:SetFrameRate(fps) end
 
 ---@return boolean
-GameEngine.IsFullScreen = function() end
+function GameEngine:IsFullScreen() end
+
+---@return string
+function GameEngine:GetTitle() end
 
 ---@return integer
-GameEngine.GetWidth = function() end
+function GameEngine:GetWidth() end
 
 ---@return integer
-GameEngine.GetHeight = function() end
+function GameEngine:GetHeight() end
 
 ---@return integer
-GameEngine.GetFrameRate = function() end
+function GameEngine:GetFrameRate() end
 
 ---@return integer
-GameEngine.GetFrameDelay = function() end
+function GameEngine:GetFrameDelay() end
 
 ---@param keyCode integer
 ---@return boolean
 function GameEngine:IsKeyDown(keyCode) end
+
+---@param text string
+---@param fontPtr Font
+---@return SIZE
+function GameEngine:CalculateTextDimensions(text, fontPtr)
 
 ---@param color integer
 function GameEngine:SetColor(color) end
@@ -45,14 +54,14 @@ function GameEngine:FillWindowRect(color) end
 ---@param x2 integer
 ---@param y2 integer
 ---@return boolean
-GameEngine.DrawLine = function(x1, y1, x2, y2) end
+function GameEngine.DrawLine(x1, y1, x2, y2) end
 
 ---@param l integer
 ---@param t integer
 ---@param r integer
 ---@param b integer
 ---@return boolean
-GameEngine.DrawRect = function(l, t, r, b) end
+function GameEngine:DrawRect(l, t, r, b) end
 
 ---@overload fun(l:integer, t:integer, r:integer, b:integer)
 ---@overload fun(l:integer, t:integer, r:integer, b:integer, opacity:integer)
@@ -62,7 +71,7 @@ GameEngine.DrawRect = function(l, t, r, b) end
 ---@param b integer
 ---@param opacity? integer
 ---@return boolean
-GameEngine.FillRect = function(l, t, r, b, opacity) end
+function GameEngine:FillRect(l, t, r, b, opacity) end
 
 ---@param l integer
 ---@param t integer
@@ -70,7 +79,7 @@ GameEngine.FillRect = function(l, t, r, b, opacity) end
 ---@param b integer
 ---@param radius integer
 ---@return boolean
-GameEngine.DrawRoundRect = function(l, t, r, b, radius) end
+function GameEngine:DrawRoundRect(l, t, r, b, radius) end
 
 ---@param l integer
 ---@param t integer
@@ -78,7 +87,7 @@ GameEngine.DrawRoundRect = function(l, t, r, b, radius) end
 ---@param b integer
 ---@param radius integer
 ---@return boolean
-GameEngine.FillRoundRect = function(l, t, r, b, radius) end
+function GameEngine:FillRoundRect(l, t, r, b, radius) end
 
 ---@param text string
 ---@param x integer
@@ -86,5 +95,8 @@ GameEngine.FillRoundRect = function(l, t, r, b, radius) end
 ---@return integer
 function GameEngine:DrawString(text, x, y) end
 
+---@return Point
+function GameEngine:GetWindowPosition() end
+
 ---@type GameEngine
-Engine = Engine
+Engine = {}

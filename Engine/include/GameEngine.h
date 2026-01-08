@@ -72,19 +72,19 @@ public:
 	bool		Run					(HINSTANCE hInstance, int cmdShow);
 
 	void		SetTitle			(const tstring& title);	// DONE		// SetTitle automatically sets the window class name 
-	void		SetWindowPosition	(int left, int top);
+	void		SetWindowPosition	(int left, int top); // DONE
 	bool		SetWindowRegion		(const HitRegion* regionPtr);
-	void		SetKeyList			(const tstring& keyList);
+	void		SetKeyList			(const tstring& keyList); // DONE
 	void		SetFrameRate		(int frameRate); // DONE
 	void		SetWidth			(int width); // DONE
 	void		SetHeight			(int height); // DONE
 
 	bool		GoFullscreen		();		// DONE
-	bool		GoWindowedMode		();
-	void		ShowMousePointer	(bool value);
+	bool		GoWindowedMode		();     // DONE
+	void		ShowMousePointer	(bool value); // DONE
 	void		Quit				(); // DONE
 
-	bool		HasWindowRegion		()										const;
+	bool		HasWindowRegion		()										const; // DONE
 	bool		IsFullscreen		()										const; // DONE
 
 	bool		IsKeyDown			(int vKey)								const; // DONE
@@ -97,7 +97,7 @@ public:
 	bool		MessageContinue		(const tstring& message)				const;
 
 	// Text Dimensions
-	SIZE		CalculateTextDimensions(const tstring& text, const Font* fontPtr)							const;
+	SIZE		CalculateTextDimensions(const tstring& text, const Font* fontPtr)							const; // DONE
 	SIZE		CalculateTextDimensions(const tstring& text, const Font* fontPtr, RECT rect)				const;
 
 	// Draw Functions
@@ -134,7 +134,7 @@ public:
 	bool		Repaint				()						const; // DONE
 
 	// Accessor Member Functions	
-	tstring		GetTitle			()						const; 
+	tstring		GetTitle			()						const; // DONE
 	HINSTANCE	GetInstance			()						const	{ return m_Instance; }
 	HWND		GetWindow			()						const	{ return m_Window; }
 	int			GetWidth			()						const	{ return m_Width; } // DONE
