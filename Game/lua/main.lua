@@ -155,7 +155,7 @@ function End()
   -- Called once at end
 end
 
--- Optional callbacks (only used if your LuaGame forwards them)
+-- Unused Callbaccks from LuaGame
 function KeyPressed(keyCode) end
 function MouseMove(mx, my, wParam) end
 function MouseButtonAction(isLeft, isDown, mx, my, wParam) end

@@ -2,14 +2,14 @@
 
 #include "GameEngine.h"
 
-
+// SHOW real error for when Lua aborts (panic)
 static int LuaPanic(lua_State* L) {
     const char* msg = lua_tostring(L, -1);
     ::MessageBoxA(nullptr,
         msg ? msg : "Lua panic (no message)",
         "Lua PANIC - abort() would be called",
         MB_OK | MB_ICONERROR);
-    return 0; // Lua will still abort after this, but at least you see the real message
+    return 0;
 }
 
 EngineLuaBindings::EngineLuaBindings()
@@ -41,7 +41,7 @@ void EngineLuaBindings::BindAll()
     "h", &SIZE::cy
     );
 
-    // Bind GameEngine methods (expand this list over time)
+    // Binding Engine methods
     m_Lua.new_usertype<GameEngine>("GameEngine",
         sol::no_constructor,
 
@@ -71,6 +71,8 @@ void EngineLuaBindings::BindAll()
         // Input
         "IsKeyDown", &GameEngine::IsKeyDown,
 
+        //"MessageBox", [](GameEngine& e, const std::string& msg) { e.MessageBox(msg); },
+
         "CalculateTextDimensions", static_cast<SIZE (GameEngine::*) (const tstring&, const Font*) const>(&GameEngine::CalculateTextDimensions),
 
         // Drawing
@@ -98,7 +100,6 @@ void EngineLuaBindings::BindAll()
 void EngineLuaBindings::LoadMain(const std::string& file)
 {
     // Only runtime scripts are loaded.
-    // This will error out if Lua has an error.
     try 
     {
         m_Lua.script_file(file);
