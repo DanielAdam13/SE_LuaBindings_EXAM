@@ -26,8 +26,8 @@ FetchContent_MakeAvailable(sol2)
 # Engine is prebuilt = >
 add_library(GameEngineLib STATIC IMPORTED)
 set_target_properties(GameEngineLib PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/Engine/lib/GameEngine8_01.lib"
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/Engine/include"  
+    IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/Project/resources/Engine/lib/GameEngine8_01.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/Project/resources/Engine/include"  
 )
 
 # Add subdirectories
